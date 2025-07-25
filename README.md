@@ -1,2 +1,2 @@
-# yuno
+# Valorant
 tournament
