@@ -7,6 +7,55 @@
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/news.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Дополнительные стили для новостей */
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .news-card {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            padding: 20px;
+            transition: transform 0.3s;
+            border: 1px solid #ff4655;
+        }
+        
+        .news-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(255, 70, 85, 0.3);
+        }
+        
+        .news-card img {
+            width: 100%;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        
+        .news-card h3 {
+            color: #ff4655;
+            margin-bottom: 10px;
+        }
+        
+        .news-card .date {
+            color: #888;
+            font-size: 0.9em;
+            margin-bottom: 10px;
+        }
+        
+        .news-card .category {
+            display: inline-block;
+            background: #ff4655;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 0.8em;
+            margin-bottom: 10px;
+        }
+    </style>
 </head>
 <body class="news-page">
     <header class="header slide-down">
@@ -15,9 +64,6 @@
                 <img src="images/6b19c8e9-8ffe-49b1-8110-1f9cf25469e1-Photoroom.png" alt="Valorant Masters">
                 <span>10 CUP</span>
             </div>
-       <head>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-</head>     
             <nav class="nav">
                 <ul>
                     <li><a href="index.html" class="active pulse">ГЛАВНАЯ</a></li>
@@ -25,7 +71,6 @@
                     <li><a href="bracket.html">СЕТКА</a></li>
                     <li><a href="news.html">НОВОСТИ</a></li>
                     <li><a href="teams.html">КОМАНДЫ</a></li>
-
                 </ul>
             </nav>
             
@@ -43,7 +88,7 @@
                 
                 <div class="news-filter">
                     <div class="search-box">
-                        <input type="text" placeholder="Поиск новостей...">
+                        <input type="text" id="news-search" placeholder="Поиск новостей...">
                         <button><i class="fas fa-search"></i></button>
                     </div>
                     <select id="news-category-filter">
@@ -81,18 +126,81 @@
                 
                 <div class="footer-social">
                     <h3>МЫ В СОЦСЕТЯХ</h3>
-        <div class="social-icons">
-            <a href="https://discord.gg/UNKerbtz" target="_blank"><img src="images/discord-logo-icon-editorial-free-vector.jpg" alt="Discord"></a>
-            <a href="https://www.twitch.tv/tendyeoff" target="_blank"><img src="images/twitch-logo_578229-259.avif" alt="Twitter"></a>
-        </div>
+                    <div class="social-icons">
+                        <a href="https://discord.gg/UNKerbtz" target="_blank"><img src="images/discord-logo-icon-editorial-free-vector.jpg" alt="Discord"></a>
+                        <a href="https://www.twitch.tv/tendyeoff" target="_blank"><img src="images/twitch-logo_578229-259.avif" alt="Twitch"></a>
                     </div>
                 </div>
+            </div>
             <div class="footer-bottom">
                 <p>&copy;10 CUP. Все права защищены.</p>
             </div>
         </div>
     </footer>
 
-    <script src="js/news.js"></script>
+    <script>
+        // Конфигурация
+        const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/YOUR_SHEET_ID/pub?output=csv';
+        
+        // Загрузка новостей
+        document.addEventListener('DOMContentLoaded', function() {
+            loadNews();
+            
+            // Поиск и фильтрация
+            document.querySelector('.search-box button').addEventListener('click', filterNews);
+            document.getElementById('news-search').addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') filterNews();
+            });
+            document.getElementById('news-category-filter').addEventListener('change', filterNews);
+        });
+        
+        function loadNews() {
+            fetch(SHEET_URL)
+                .then(response => response.text())
+                .then(data => {
+                    const newsContainer = document.getElementById('news-container');
+                    const rows = data.split('\n').slice(1); // Пропускаем заголовок
+                    
+                    rows.forEach(row => {
+                        const [date, title, content, category, image] = row.split(',');
+                        if (!title) return;
+                        
+                        const newsCard = document.createElement('div');
+                        newsCard.className = 'news-card';
+                        newsCard.setAttribute('data-category', category.toLowerCase());
+                        newsCard.innerHTML = `
+                            ${image ? `<img src="${image}" alt="${title}">` : ''}
+                            <span class="category">${category}</span>
+                            <h3>${title}</h3>
+                            <p>${content}</p>
+                            <div class="date">${date}</div>
+                        `;
+                        newsContainer.appendChild(newsCard);
+                    });
+                })
+                .catch(error => console.error('Ошибка загрузки новостей:', error));
+        }
+        
+        function filterNews() {
+            const searchTerm = document.getElementById('news-search').value.toLowerCase();
+            const categoryFilter = document.getElementById('news-category-filter').value;
+            const newsCards = document.querySelectorAll('.news-card');
+            
+            newsCards.forEach(card => {
+                const title = card.querySelector('h3').textContent.toLowerCase();
+                const content = card.querySelector('p').textContent.toLowerCase();
+                const category = card.getAttribute('data-category');
+                
+                const matchesSearch = title.includes(searchTerm) || content.includes(searchTerm);
+                const matchesCategory = categoryFilter === 'all' || category === categoryFilter.toLowerCase();
+                
+                if (matchesSearch && matchesCategory) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+    </script>
 </body>
 </html>
