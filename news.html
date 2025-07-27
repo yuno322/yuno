@@ -141,66 +141,38 @@
     <script>
         // Конфигурация
         const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRmr88GC8dxJnZcC4Izwnwbhs5-SjBz2zYr5nQums1gUhmteMZe49Yj75KBGfO7e8YFncMFTdk20sbB/pub?output=csv';
-        
-        // Загрузка новостей
-        document.addEventListener('DOMContentLoaded', function() {
-            loadNews();
-            
-            // Поиск и фильтрация
-            document.querySelector('.search-box button').addEventListener('click', filterNews);
-            document.getElementById('news-search').addEventListener('keyup', function(e) {
-                if (e.key === 'Enter') filterNews();
-            });
-            document.getElementById('news-category-filter').addEventListener('change', filterNews);
-        });
-        
-        function loadNews() {
-            fetch(SHEET_URL)
-                .then(response => response.text())
-                .then(data => {
-                    const newsContainer = document.getElementById('news-container');
-                    const rows = data.split('\n').slice(1); // Пропускаем заголовок
-                    
-                    rows.forEach(row => {
-                        const [date, title, content, category, image] = row.split(',');
-                        if (!title) return;
-                        
-                        const newsCard = document.createElement('div');
-                        newsCard.className = 'news-card';
-                        newsCard.setAttribute('data-category', category.toLowerCase());
-                        newsCard.innerHTML = `
-                            ${image ? `<img src="${image}" alt="${title}">` : ''}
-                            <span class="category">${category}</span>
-                            <h3>${title}</h3>
-                            <p>${content}</p>
-                            <div class="date">${date}</div>
-                        `;
-                        newsContainer.appendChild(newsCard);
-                    });
-                })
-                .catch(error => console.error('Ошибка загрузки новостей:', error));
-        }
-        
-        function filterNews() {
-            const searchTerm = document.getElementById('news-search').value.toLowerCase();
-            const categoryFilter = document.getElementById('news-category-filter').value;
-            const newsCards = document.querySelectorAll('.news-card');
-            
-            newsCards.forEach(card => {
-                const title = card.querySelector('h3').textContent.toLowerCase();
-                const content = card.querySelector('p').textContent.toLowerCase();
-                const category = card.getAttribute('data-category');
-                
-                const matchesSearch = title.includes(searchTerm) || content.includes(searchTerm);
-                const matchesCategory = categoryFilter === 'all' || category === categoryFilter.toLowerCase();
-                
-                if (matchesSearch && matchesCategory) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-        }
+
+
+fetch(SHEET_URL)
+  .then(response => {
+    if (!response.ok) throw new Error('Ошибка загрузки таблицы');
+    return response.text();
+  })
+  .then(data => {
+    const newsContainer = document.getElementById('news-container');
+    const rows = data.split('\n').slice(1); // Пропускаем заголовок
+    
+    rows.forEach(row => {
+      const [date, title, content, category, image] = row.split(',');
+      if (!title) return; // Пропускаем пустые строки
+      
+      newsContainer.innerHTML += `
+        <div class="news-card" data-category="${category.toLowerCase()}">
+          ${image ? `<img src="${image}" alt="${title}">` : ''}
+          <span class="category">${category}</span>
+          <h3>${title}</h3>
+          <p>${content}</p>
+          <div class="date">${date}</div>
+        </div>
+      `;
+    });
+  })
+  .catch(error => {
+    console.error('Ошибка:', error);
+    document.getElementById('news-container').innerHTML = `
+      <p style="color: red">Ошибка загрузки новостей. Проверьте консоль для деталей.</p>
+    `;
+  });
     </script>
 </body>
 </html>
