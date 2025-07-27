@@ -1,2 +1,2 @@
-# yuno
-турнир
+# Valorant
+tournament

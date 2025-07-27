@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>10 CUP | Регистрация команды</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/register.css">
+</head>
+<body class="register-page">
+    <header class="header slide-down">
+        <div class="container">
+            <div class="logo glow">
+                <img src="images/6b19c8e9-8ffe-49b1-8110-1f9cf25469e1-Photoroom.png" alt="Valorant Masters">
+                <span>10 CUP</span>
+            </div>
+       <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>     
+            <nav class="nav">
+                <ul>
+                    <li><a href="index.html" class="active pulse">ГЛАВНАЯ</a></li>
+                    <li><a href="register.html">РЕГИСТРАЦИЯ</a></li>
+                    <li><a href="bracket.html">СЕТКА</a></li>
+                    <li><a href="news.html">НОВОСТИ</a></li>
+                    <li><a href="teams.html">КОМАНДЫ</a></li>
+
+                </ul>
+            </nav>
+            
+            <div class="burger">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="register-section">
+            <div class="container">
+                <h1 class="section-title">РЕГИСТРАЦИЯ КОМАНДЫ</h1>
+                
+                <form id="team-registration-form" class="register-form">
+                    <div class="form-group">
+                        <label for="team-name">Название команды*</label>
+                        <input type="text" id="team-name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="team-tag">Тег команды (3-5 символов)*</label>
+                        <input type="text" id="team-tag" minlength="3" maxlength="5" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="team-logo">Логотип команды*</label>
+                        <input type="file" id="team-logo" accept="image/*" required>
+                        <div id="logo-preview" class="logo-preview"></div>
+                    </div>
+                    
+                    <h3>Состав команды (минимум 5 игроков)*</h3>
+                    
+                    <div class="players-list" id="players-list">
+                        <!-- Игроки будут добавляться здесь -->
+                    </div>
+                    
+                    <button type="button" class="btn btn-outline" id="add-player-btn">
+                        <i class="fas fa-plus"></i> Добавить игрока
+                    </button>
+                    
+                    <div class="form-group">
+                        <label for="team-captain">Капитан команды*</label>
+                        <select id="team-captain" required disabled>
+                            <option value="">Выберите капитана</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contact-email">Контактный Discord*</label>
+                        <input type="email" id="contact-email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contact-phone">Контактный Telegram</label>
+                        <input type="tel" id="contact-phone">
+                    </div>
+                    
+                    <div class="form-group checkbox-group">
+                        <input type="checkbox" id="agree-rules" required>
+                        <label for="agree-rules">Я согласен с правилами турнира*</label>
+                    </div>
+                    
+                    <div class="form-submit">
+                        <button type="submit" class="btn btn-red" id="submit-btn">
+                            <span class="submit-text">Отправить заявку</span>
+                            <span class="loading-spinner" style="display: none;">
+                                <i class="fas fa-spinner fa-spin"></i>
+                            </span>
+                        </button>
+                    </div>
+                </form>
+                
+                <div id="success-message" class="success-message" style="display: none;">
+                    <i class="fas fa-check-circle"></i>
+                    <h3>Заявка успешно отправлена!</h3>
+                    <p>Ваша заявка находится на рассмотрении. Мы свяжемся с вами в ближайшее время.</p>
+                    <a href="index.html" class="btn btn-outline">Вернуться на главную</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-logo">
+                    <img src="images/6b19c8e9-8ffe-49b1-8110-1f9cf25469e1-Photoroom.png" alt="Valorant Masters">
+                </div>
+                
+                <div class="footer-links">
+                    <h3>БЫСТРЫЕ ССЫЛКИ</h3>
+                    <ul>
+                        <li><a href="index.html" class="hover-underline">Главная</a></li>
+                        <li><a href="register.html" class="hover-underline">Регистрация</a></li>
+                        <li><a href="bracket.html" class="hover-underline">Сетка</a></li>
+                        <li><a href="news.html" class="hover-underline">Новости</a></li>
+                        <li><a href="teams.html" class="hover-underline">Команды</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-social">
+                    <h3>МЫ В СОЦСЕТЯХ</h3>
+        <div class="social-icons">
+            <a href="https://discord.gg/UNKerbtz" target="_blank"><img src="images/discord-logo-icon-editorial-free-vector.jpg" alt="Discord"></a>
+            <a href="https://www.twitch.tv/tendyeoff" target="_blank"><img src="images/twitch-logo_578229-259.avif" alt="Twitter"></a>
+        </div>
+                    </div>
+                </div>
+            <div class="footer-bottom">
+                <p>&copy;10 CUP. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+    <script src="js/register.js"></script>
+</body>
+</html>
